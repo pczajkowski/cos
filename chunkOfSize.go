@@ -1,25 +1,25 @@
 package cos
 
 import (
-  "strings"
-  "unicode/utf8"
-  "fmt"
+	"fmt"
+	"strings"
+	"unicode/utf8"
 )
 
 // ChunkOfSize
 type ChunkOfSize struct {
 	current int
-	limit int
-	chunks []string
-	errors []string
+	limit   int
+	chunks  []string
+	errors  []string
 }
 
 // NewChunkOfSize returns new instance of ChunkOfSize initialized with given text and size
 func NewChunkOfSize(text string, size int) *ChunkOfSize {
 	return &ChunkOfSize{
 		current: 0,
-		limit: size,
-		chunks: strings.Split(text, " "),
+		limit:   size,
+		chunks:  strings.Split(text, " "),
 	}
 }
 
@@ -28,12 +28,13 @@ func (c *ChunkOfSize) Next() string {
 	var b strings.Builder
 	for i := range c.chunks {
 		l := utf8.RuneCountInString(c.chunks[i])
-    if l >= c.limit {
-      c.errors = append(c.errors, fmt.Sprintf("Chunk {%s} is bigger than limit %d!", c.chunks[i], c.limit))
-      return ""
-    }
-    
-		if l + c.current >= c.limit {
+		if l >= c.limit {
+			c.errors = append(c.errors, fmt.Sprintf("Chunk {%s} is bigger than limit %d!", c.chunks[i], c.limit))
+			c.chunks = []string{}
+			return ""
+		}
+
+		if l+c.current >= c.limit {
 			c.current = 0
 			c.chunks = c.chunks[i:]
 			return b.String()
@@ -67,5 +68,5 @@ func (c *ChunkOfSize) Success() bool {
 
 // GetErrors returns erorrs
 func (c *ChunkOfSize) GetErrors() []string {
-  return c.errors
+	return c.errors
 }
