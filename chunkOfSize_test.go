@@ -34,3 +34,18 @@ func Test4ChunksOf100(t *testing.T) {
 		t.Fatal("There were errors:\n", strings.Join(chunk.GetErrors(), "\n"))
 	}
 }
+
+func TestWordBiggerThanLimit(t *testing.T) {
+	size := 4
+  
+	chunk := NewChunkOfSize(testText, size)
+
+	text := chunk.Next()
+  if text != "" {
+    t.Fatal("Chunk should be empty, but is:", text)
+  }
+
+	if chunk.Success() || len(chunk.GetErrors()) == 0 {
+		t.Fatal("There should be errors!")
+	}
+}

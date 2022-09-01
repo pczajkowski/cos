@@ -28,6 +28,11 @@ func (c *ChunkOfSize) Next() string {
 	var b strings.Builder
 	for i := range c.chunks {
 		l := utf8.RuneCountInString(c.chunks[i])
+    if l >= c.limit {
+      c.errors = append(c.errors, fmt.Sprintf("Chunk {%s} is bigger than limit %d!", c.chunks[i], c.limit))
+      return ""
+    }
+    
 		if l + c.current >= c.limit {
 			c.current = 0
 			c.chunks = c.chunks[i:]
