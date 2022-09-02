@@ -76,3 +76,32 @@ func TestTextShorterThanLimit(t *testing.T) {
 		t.Fatal("There were errors:\n", strings.Join(chunk.GetErrors(), "\n"))
 	}
 }
+
+func checkWord(word string) bool {
+  for i := range validWords {
+    if word == validWords[i] {
+      return true
+    }
+  }
+
+  return false
+}
+
+func TestWordsNotCut(t *testing.T){
+  size := 12
+  chunk := NewChunkOfSize(shorterText, size)
+
+	for {
+		text := chunk.Next()
+		if text == "" {
+			break
+		}
+
+		words := strings.Split(text, " ")
+    for i := range words {
+      if !checkWord(words[i]) {
+        t.Fatal(words[i], "isn't a valid word!")
+      }
+    }
+	}
+}
