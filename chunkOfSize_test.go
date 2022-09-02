@@ -49,3 +49,32 @@ func TestWordBiggerThanLimit(t *testing.T) {
 		t.Fatal("There should be errors!")
 	}
 }
+
+func TestTextShorterThanLimit(t *testing.T) {
+	size := 400
+  expectedChunks := 1
+  
+	chunk := NewChunkOfSize(testText, size)
+	count := 0
+
+	for {
+		text := chunk.Next()
+		if text == "" {
+			break
+		}
+
+		if utf8.RuneCountInString(text) > size {
+			t.Fatal(text, "\nis longer than", size)
+		}
+
+		count++
+	}
+  
+	if count != expectedChunks {
+		t.Fatal("There should be", expectedChunks, "chunks, but have", count)
+	}
+
+	if !chunk.Success() {
+		t.Fatal("There were errors:\n", strings.Join(chunk.GetErrors(), "\n"))
+	}
+}
