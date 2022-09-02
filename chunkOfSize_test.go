@@ -4,13 +4,11 @@ import (
 	"strings"
 	"testing"
 	"unicode/utf8"
+  "fmt"
 )
 
-func Test4ChunksOf100(t *testing.T) {
-	size := 100
-  expectedChunks := 4
-  
-	chunk := NewChunkOfSize(testText, size)
+func checkChunks(text string, size int) (*ChunkOfSize, int, error) {
+  chunk := NewChunkOfSize(testText, size)
 	count := 0
 
 	for {
@@ -20,11 +18,23 @@ func Test4ChunksOf100(t *testing.T) {
 		}
 
 		if utf8.RuneCountInString(text) > size {
-			t.Fatal(text, "\nis longer than", size)
+      return chunk, -1, fmt.Errorf("'%s'\nis longer than %d", text, size)
 		}
 
 		count++
 	}
+
+  return chunk, count, nil
+}
+
+func Test4ChunksOf100(t *testing.T) {
+	size := 100
+  expectedChunks := 4
+  
+	chunk, count, err := checkChunks(testText, size)
+  if err != nil {
+    t.Fatal(err)
+  }
   
 	if count != expectedChunks {
 		t.Fatal("There should be", expectedChunks, "chunks, but have", count)
@@ -37,7 +47,6 @@ func Test4ChunksOf100(t *testing.T) {
 
 func TestWordBiggerThanLimit(t *testing.T) {
 	size := 4
-  
 	chunk := NewChunkOfSize(testText, size)
 
 	text := chunk.Next()
@@ -53,22 +62,11 @@ func TestWordBiggerThanLimit(t *testing.T) {
 func TestTextShorterThanLimit(t *testing.T) {
 	size := 400
   expectedChunks := 1
-  
-	chunk := NewChunkOfSize(testText, size)
-	count := 0
 
-	for {
-		text := chunk.Next()
-		if text == "" {
-			break
-		}
-
-		if utf8.RuneCountInString(text) > size {
-			t.Fatal(text, "\nis longer than", size)
-		}
-
-		count++
-	}
+  chunk, count, err := checkChunks(testText, size)
+  if err != nil {
+    t.Fatal(err)
+  }
   
 	if count != expectedChunks {
 		t.Fatal("There should be", expectedChunks, "chunks, but have", count)
