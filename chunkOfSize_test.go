@@ -9,6 +9,10 @@ import (
 
 func checkChunks(text string, size int) (*chunkOfSize, int, error) {
   chunk := NewChunkOfSize(testText, size)
+	if chunk == nil {
+		return nil, -1, fmt.Errorf("Chunk is nil!")
+	}
+	
 	count := 0
 
 	for {
@@ -80,6 +84,9 @@ func checkWord(word string) bool {
 func TestWordsNotCut(t *testing.T){
   size := 12
   chunk := NewChunkOfSize(shorterText, size)
+	if chunk == nil {
+		t.Fatal("Chunk shouldn't be nil!")
+	}
 
 	for {
 		text := chunk.Next()
