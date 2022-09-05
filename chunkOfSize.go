@@ -15,6 +15,10 @@ type chunkOfSize struct {
 
 // NewChunkOfSize returns new instance of ChunkOfSize initialized with given text and size
 func NewChunkOfSize(text string, size int) *chunkOfSize {
+	if utf8.RuneCountInString(text) < size {
+		return nil
+	}
+	
 	return &chunkOfSize{
 		current: 0,
 		limit:   size,

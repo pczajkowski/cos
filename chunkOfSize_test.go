@@ -61,19 +61,9 @@ func TestWordBiggerThanLimit(t *testing.T) {
 
 func TestTextShorterThanLimit(t *testing.T) {
 	size := 400
-  expectedChunks := 1
-
-  chunk, count, err := checkChunks(testText, size)
-  if err != nil {
-    t.Fatal(err)
-  }
-  
-	if count != expectedChunks {
-		t.Fatal("There should be", expectedChunks, "chunks, but have", count)
-	}
-
-	if !chunk.Success() {
-		t.Fatal("There were errors:\n", strings.Join(chunk.GetErrors(), "\n"))
+  chunk := NewChunkOfSize(shorterText, size)
+	if chunk != nil {
+		t.Fatal("Chunk should be nil!")
 	}
 }
 
