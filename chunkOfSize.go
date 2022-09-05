@@ -6,8 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-// ChunkOfSize
-type ChunkOfSize struct {
+type chunkOfSize struct {
 	current int
 	limit   int
 	chunks  []string
@@ -15,8 +14,8 @@ type ChunkOfSize struct {
 }
 
 // NewChunkOfSize returns new instance of ChunkOfSize initialized with given text and size
-func NewChunkOfSize(text string, size int) *ChunkOfSize {
-	return &ChunkOfSize{
+func NewChunkOfSize(text string, size int) *chunkOfSize {
+	return &chunkOfSize{
 		current: 0,
 		limit:   size,
 		chunks:  strings.Split(text, " "),
@@ -24,7 +23,7 @@ func NewChunkOfSize(text string, size int) *ChunkOfSize {
 }
 
 // Next returns next chunk of text or empty string if nothing left to process
-func (c *ChunkOfSize) Next() string {
+func (c *chunkOfSize) Next() string {
 	var b strings.Builder
 	for i := range c.chunks {
 		l := utf8.RuneCountInString(c.chunks[i])
@@ -62,11 +61,11 @@ func (c *ChunkOfSize) Next() string {
 }
 
 // Success returns true if there are no errors
-func (c *ChunkOfSize) Success() bool {
+func (c *chunkOfSize) Success() bool {
 	return len(c.errors) == 0
 }
 
 // GetErrors returns erorrs
-func (c *ChunkOfSize) GetErrors() []string {
+func (c *chunkOfSize) GetErrors() []string {
 	return c.errors
 }

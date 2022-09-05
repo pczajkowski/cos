@@ -7,7 +7,7 @@ import (
   "fmt"
 )
 
-func checkChunks(text string, size int) (*ChunkOfSize, int, error) {
+func checkChunks(text string, size int) (*chunkOfSize, int, error) {
   chunk := NewChunkOfSize(testText, size)
 	count := 0
 
