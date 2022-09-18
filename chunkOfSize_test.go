@@ -7,8 +7,8 @@ import (
 	"unicode/utf8"
 )
 
-func checkChunks(text string, size int) (*chunkOfSize, int, error) {
-	chunk := NewChunkOfSize(testText, size)
+func checkChunks(text string, size int) (*ChunkOfSize, int, error) {
+	chunk := NewChunkOfSize(text, size)
 	if chunk == nil {
 		return nil, -1, fmt.Errorf("Chunk is nil!")
 	}
